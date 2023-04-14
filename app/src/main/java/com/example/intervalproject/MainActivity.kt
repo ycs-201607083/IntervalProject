@@ -7,6 +7,7 @@ import android.os.Handler
 import android.os.Looper
 import android.util.Log
 import android.view.View
+import com.example.intervalproject.Dialog.CustomDialog
 import com.example.intervalproject.databinding.ActivityMainBinding
 import java.util.Timer
 import java.util.TimerTask
@@ -109,6 +110,19 @@ class MainActivity : AppCompatActivity() {
 
         //타이머 텍스트 보여주기
         binding.timerText.text = timeLeftText
+    }
+
+    override fun onBackPressed() {
+        super.onBackPressed()
+        val dialog = CustomDialog(this)
+
+        try {
+            dialog.myDialog()
+            Log.d("asdasd","1111")
+        }catch (e: Exception){
+            e.printStackTrace()
+        }
+
     }
 
 }
