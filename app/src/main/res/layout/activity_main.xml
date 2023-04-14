@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/gray"
+        tools:context=".MainActivity">
+
+    <LinearLayout
+            android:id="@+id/lienarLayout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent">
+
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="시작 시간"
+                android:textSize="30dp"
+                android:textStyle="bold"
+                android:textColor="@color/white"/>
+
+        <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+            <EditText
+                    android:id="@+id/workingHour"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:inputType="number"
+                    android:nextFocusDown="@id/workingMin"
+                    android:text="03"
+                    android:textColor="@color/white"
+                    android:textStyle="bold"
+                    android:textSize="55dp"/>
+
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=":"
+                    android:textSize="55dp"
+                    android:textStyle="bold"
+                    android:textColor="@color/white"/>
+
+            <EditText
+                    android:id="@+id/workingMin"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:inputType="number"
+                    android:text="00"
+                    android:textColor="@color/white"
+                    android:textStyle="bold"
+                    android:textSize="55dp"/>
+
+        </LinearLayout>
+
+
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:text="쉬는 시간"
+                android:textSize="30dp"
+                android:textStyle="bold"
+                android:textColor="@color/white"/>
+
+        <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+            <EditText
+                    android:id="@+id/stopHour"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:inputType="number"
+                    android:nextFocusDown="@id/stopMin"
+                    android:text="02"
+                    android:textColor="@color/white"
+                    android:textStyle="bold"
+                    android:textSize="55dp"/>
+
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=":"
+                    android:textSize="55dp"
+                    android:textStyle="bold"
+                    android:textColor="@color/white"/>
+
+            <EditText
+                    android:id="@+id/stopMin"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:inputType="number"
+                    android:text="00"
+                    android:textColor="@color/white"
+                    android:textStyle="bold"
+                    android:textSize="55dp"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <androidx.appcompat.widget.AppCompatButton
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/btn_backgroud"
+            android:text="시작"
+            android:textColor="@color/white"
+            android:textSize="35dp"
+            android:textStyle="bold"
+            android:layout_gravity="center"
+            app:layout_constraintTop_toBottomOf="@+id/lienarLayout"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"/>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
