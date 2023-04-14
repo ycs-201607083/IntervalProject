@@ -9,14 +9,17 @@
         tools:context=".MainActivity">
 
     <LinearLayout
-            android:id="@+id/lienarLayout"
-            android:layout_width="wrap_content"
+            android:id="@+id/settingLayout"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:orientation="vertical"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent">
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintVertical_bias="0.3"
+            android:gravity="center"
+            android:visibility="visible">
 
         <TextView
                 android:layout_width="wrap_content"
@@ -32,11 +35,11 @@
                 android:orientation="horizontal">
 
             <EditText
-                    android:id="@+id/workingHour"
+                    android:id="@+id/workingMin"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:inputType="number"
-                    android:nextFocusDown="@id/workingMin"
+                    android:nextFocusDown="@id/workingSec"
                     android:text="03"
                     android:textColor="@color/white"
                     android:textStyle="bold"
@@ -51,13 +54,14 @@
                     android:textColor="@color/white"/>
 
             <EditText
-                    android:id="@+id/workingMin"
+                    android:id="@+id/workingSec"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:inputType="number"
                     android:text="00"
                     android:textColor="@color/white"
                     android:textStyle="bold"
+                    android:nextFocusDown="@id/stopMin"
                     android:textSize="55dp"/>
 
         </LinearLayout>
@@ -78,11 +82,11 @@
                 android:orientation="horizontal">
 
             <EditText
-                    android:id="@+id/stopHour"
+                    android:id="@+id/stopMin"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:inputType="number"
-                    android:nextFocusDown="@id/stopMin"
+                    android:nextFocusDown="@id/stopSec"
                     android:text="02"
                     android:textColor="@color/white"
                     android:textStyle="bold"
@@ -97,7 +101,7 @@
                     android:textColor="@color/white"/>
 
             <EditText
-                    android:id="@+id/stopMin"
+                    android:id="@+id/stopSec"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:inputType="number"
@@ -108,21 +112,100 @@
 
         </LinearLayout>
 
+        <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/timerBtn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/btn_backgroud"
+                android:text="시작"
+                android:textColor="@color/black"
+                android:textSize="35dp"
+                android:textStyle="bold"
+                android:layout_gravity="center"
+                app:layout_constraintTop_toBottomOf="@+id/lienarLayout"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintVertical_bias="0.484"/>
     </LinearLayout>
 
-    <androidx.appcompat.widget.AppCompatButton
-            android:layout_width="match_parent"
+
+    <LinearLayout
+            android:id="@+id/workingLayout"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/btn_backgroud"
-            android:text="시작"
-            android:textColor="@color/white"
-            android:textSize="35dp"
-            android:textStyle="bold"
-            android:layout_gravity="center"
-            app:layout_constraintTop_toBottomOf="@+id/lienarLayout"
+            android:orientation="vertical"
+            android:visibility="gone"
+            app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"/>
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintVertical_bias="0.31">
 
+
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="시작 시간"
+                android:textSize="30dp"
+                android:textStyle="bold"
+                android:textColor="@color/white"
+                android:layout_gravity="center"/>
+
+        <TextView
+                android:id="@+id/timerText"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="00:00"
+                android:textStyle="bold"
+                android:textSize="58dp"
+                android:gravity="center"
+                android:textColor="@color/white"/>
+
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="35dp"
+                android:text="쉬는 시간"
+                android:textSize="30dp"
+                android:textStyle="bold"
+                android:textColor="@color/white"
+                android:layout_gravity="center"/>
+
+        <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="5dp"
+                android:text="00:00"
+                android:textStyle="bold"
+                android:textSize="58dp"
+                android:gravity="center"
+                android:textColor="@color/white"/>
+
+
+        <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+            <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/timeStop"
+                    android:layout_width="200dp"
+                    android:layout_height="wrap_content"
+                    android:visibility="visible"
+                    android:text="정지"
+                    android:textSize="45dp"/>
+
+            <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/timePause"
+                    android:layout_width="200dp"
+                    android:layout_height="wrap_content"
+                    android:visibility="visible"
+                    android:text="돌아가기"
+                    android:textSize="45dp"/>
+
+        </LinearLayout>
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
