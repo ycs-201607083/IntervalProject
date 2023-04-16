@@ -101,7 +101,7 @@ class MainActivity : AppCompatActivity() {
         if (min < 10) timeLeftText += "0"
 
         //분 추가
-        timeLeftText += "$min :"
+        timeLeftText += "$min:"
 
         if(sec < 10) timeLeftText += "0"
 
@@ -113,16 +113,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onBackPressed() {
-        super.onBackPressed()
-        val dialog = CustomDialog(this)
-
-        try {
-            dialog.myDialog()
-            Log.d("asdasd","1111")
-        }catch (e: Exception){
-            e.printStackTrace()
-        }
-
+       CustomDialog(this).show()
     }
 
 }

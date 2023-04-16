@@ -4,16 +4,16 @@ import android.app.Dialog
 import android.content.Context
 import android.view.WindowManager
 import com.example.intervalproject.R
+import com.example.intervalproject.databinding.ActivtyDialogBinding
 
-class CustomDialog(mContext: Context) {
-    private val dialog = Dialog(mContext)
-
-    fun myDialog(){
-        dialog.setContentView(R.layout.activty_dialog)
-        dialog.window!!.setLayout(WindowManager.LayoutParams.MATCH_PARENT,
-                                        WindowManager.LayoutParams.WRAP_CONTENT)
-
-        dialog.setCanceledOnTouchOutside(true)
-        dialog.setCancelable(true)
+class CustomDialog constructor(mContext: Context): Dialog(mContext) {
+    lateinit var dBinding: ActivtyDialogBinding
+    init {
+       setContentView(R.layout.activty_dialog)
+       window!!.setLayout(WindowManager.LayoutParams.WRAP_CONTENT,
+            WindowManager.LayoutParams.WRAP_CONTENT)
+       setCanceledOnTouchOutside(false)
+       setCancelable(true)
     }
+    
 }
