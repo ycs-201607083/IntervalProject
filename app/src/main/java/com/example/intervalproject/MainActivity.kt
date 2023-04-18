@@ -1,5 +1,7 @@
 package com.example.intervalproject
 
+import android.media.AudioManager
+import android.media.ToneGenerator
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.CountDownTimer
@@ -93,6 +95,7 @@ class MainActivity : AppCompatActivity() {
         firstState = false
         binding.timeStop.setText("일시정지")
         Toast.makeText(this, "일시정자", Toast.LENGTH_SHORT).show()
+
     }
 
     private fun stopTimer() {
@@ -121,7 +124,26 @@ class MainActivity : AppCompatActivity() {
         workTimeLeftText += sec
 
         //타이머 텍스트 보여주기
-        binding.workTimerText.text  = workTimeLeftText
+        binding.workTimerText.text = workTimeLeftText
+
+        if (min.toInt() == 0 && sec.toInt() == 0) {
+            val beep = ToneGenerator(AudioManager.STREAM_MUSIC, ToneGenerator.MAX_VOLUME)
+
+            //시작타이머 00:00일 시 비프음
+            Thread(Runnable {
+                var count = 0
+                while (count < 3) {
+                    count++
+                    try {
+                        beep.startTone(ToneGenerator.TONE_DTMF_S, 300)
+                        Thread.sleep(1000)
+                    } catch (e: Exception) {
+                        e.printStackTrace()
+                    }
+                }
+            }).start()
+
+        }
     }
 
     override fun onBackPressed() {
