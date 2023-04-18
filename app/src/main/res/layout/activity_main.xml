@@ -154,7 +154,7 @@
                 android:layout_gravity="center"/>
 
         <TextView
-                android:id="@+id/timerText"
+                android:id="@+id/workTimerText"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:text="00:00"
@@ -164,6 +164,7 @@
                 android:textColor="@color/white"/>
 
         <TextView
+                android:id="@+id/restTimerText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="35dp"
@@ -194,7 +195,7 @@
                     android:layout_width="200dp"
                     android:layout_height="wrap_content"
                     android:visibility="visible"
-                    android:text="정지"
+                    android:text="일시정지"
                     android:textSize="45dp"/>
 
             <androidx.appcompat.widget.AppCompatButton
