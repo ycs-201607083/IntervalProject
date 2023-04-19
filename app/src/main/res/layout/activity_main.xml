@@ -41,6 +41,8 @@
                     android:inputType="number"
                     android:nextFocusDown="@id/workingSec"
                     android:text="03"
+                    android:selectAllOnFocus="true"
+                    android:maxLength="2"
                     android:textColor="@color/white"
                     android:textStyle="bold"
                     android:textSize="55dp"/>
@@ -59,9 +61,11 @@
                     android:layout_height="wrap_content"
                     android:inputType="number"
                     android:text="00"
+                    android:selectAllOnFocus="true"
+                    android:maxLength="2"
                     android:textColor="@color/white"
                     android:textStyle="bold"
-                    android:nextFocusDown="@id/stopMin"
+                    android:nextFocusDown="@id/restMin"
                     android:textSize="55dp"/>
 
         </LinearLayout>
@@ -82,12 +86,14 @@
                 android:orientation="horizontal">
 
             <EditText
-                    android:id="@+id/stopMin"
+                    android:id="@+id/restMin"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:inputType="number"
-                    android:nextFocusDown="@id/stopSec"
-                    android:text="02"
+                    android:nextFocusDown="@id/restSec"
+                    android:text="03"
+                    android:selectAllOnFocus="true"
+                    android:maxLength="2"
                     android:textColor="@color/white"
                     android:textStyle="bold"
                     android:textSize="55dp"/>
@@ -101,11 +107,13 @@
                     android:textColor="@color/white"/>
 
             <EditText
-                    android:id="@+id/stopSec"
+                    android:id="@+id/restSec"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:inputType="number"
                     android:text="00"
+                    android:selectAllOnFocus="true"
+                    android:maxLength="2"
                     android:textColor="@color/white"
                     android:textStyle="bold"
                     android:textSize="55dp"/>
@@ -175,6 +183,7 @@
                 android:layout_gravity="center"/>
 
         <TextView
+                android:id="@+id/restTimer"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginTop="5dp"

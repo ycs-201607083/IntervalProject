@@ -1,37 +1,40 @@
 package com.example.intervalproject
 
+import android.content.Context
 import android.media.AudioManager
 import android.media.ToneGenerator
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.CountDownTimer
-import android.os.Handler
-import android.os.Looper
 import android.util.Log
 import android.view.View
+import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.WindowInsetsControllerCompat
 import com.example.intervalproject.Dialog.CustomDialog
+import com.example.intervalproject.Interface.Interface
 import com.example.intervalproject.databinding.ActivityMainBinding
-import com.example.intervalproject.databinding.ActivtyDialogBinding
-import java.util.Timer
-import java.util.TimerTask
-import kotlin.concurrent.timerTask
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
     private lateinit var countDownTimer: CountDownTimer
     var timerRunning = false        //타이머 실행상태
+    val timerResting = false
     var firstState = false      //타이머 실행 처음인지
     var time = 0L   //타이머 시간
     var tempTime = 0L   //타이머 임시 시간
     var restTime = 0L   //휴식 타이머 시간
     var restTempTime = 0L   //휴식 타이머 임시 시간
+    var keyBoardManager: InputMethodManager? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        keyBoardManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager?
 
         //시간정지, 일시정지
         binding.timeStop.setOnClickListener {
@@ -42,8 +45,13 @@ class MainActivity : AppCompatActivity() {
         binding.timerBtn.setOnClickListener {
             timerSetting("start")
             startTimer()
+            keyBordHide()
         }
     }   //onCreate
+
+    fun keyBordHide() {
+        WindowInsetsControllerCompat(window, window.decorView).hide(WindowInsetsCompat.Type.ime())
+    }
 
     fun timerSetting(mode: String) {
         firstState = true
@@ -75,18 +83,15 @@ class MainActivity : AppCompatActivity() {
         } else {      //정지 후 이어서 시작이면 기존값 사용
             time = tempTime
         }
-
         //타이머 실행
         countDownTimer = object : CountDownTimer(time, 1000) {
             override fun onTick(millisUntilFinished: Long) {
                 tempTime = millisUntilFinished
                 //타이머 업데이트
-                updateTime()
+                updateTime("w")
             }
 
-            override fun onFinish() {
-
-            }
+            override fun onFinish() {}
         }.start()
 
         //타이머 상태 = 실행
@@ -94,8 +99,26 @@ class MainActivity : AppCompatActivity() {
         //처음실행 아님
         firstState = false
         binding.timeStop.setText("일시정지")
-        Toast.makeText(this, "일시정자", Toast.LENGTH_SHORT).show()
+        Toast.makeText(this, "일시정지", Toast.LENGTH_SHORT).show()
 
+        //휴식타이머 실행
+        if (!timerRunning) {
+            val restingMin = binding.restMin.text.toString()
+            val restingSec = binding.restSec.text.toString()
+
+            restTime = (restingMin.toLong() * 60000) + (restingSec.toLong() * 1000) + 1000
+
+
+            countDownTimer = object : CountDownTimer(restTime, 1000) {
+                override fun onTick(millisUntilFinished: Long) {
+                    restTempTime = millisUntilFinished
+                    updateTime("r")
+
+                }
+
+                override fun onFinish() {}
+            }.start()
+        }
     }
 
     private fun stopTimer() {
@@ -106,43 +129,85 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    private fun updateTime() {
-        val min = tempTime % 3600000 / 60000
-        val sec = tempTime % 3600000 % 60000 / 1000
+    private fun updateTime(name: String) {
+        val workngMin = tempTime % 3600000 / 60000
+        val workingSec = tempTime % 3600000 % 60000 / 1000
+        val restingMin = restTempTime % 3600000 / 60000
+        val restingSec = restTempTime % 3600000 % 60000 / 1000
         var workTimeLeftText = ""
         var restTimeLeftText = ""
 
-        //분이 10보다 작으면 0 붙이기
-        if (min < 10) workTimeLeftText += "0"
+        if (name == "w") {
+            //분이 10보다 작으면 0 붙이기
+            if (workngMin < 10) {
+                workTimeLeftText += "0"
+            }
+            //분 추가
+            workTimeLeftText += "$workngMin:"
 
-        //분 추가
-        workTimeLeftText += "$min:"
+            //초가 10보다 작으면 0 붙임
+            if (workingSec < 10) {
+                workTimeLeftText += "0"
+            }
+            //초 추가
+            workTimeLeftText += workingSec
 
-        if (sec < 10) workTimeLeftText += "0"
+            //타이머 텍스트 보여주기
+            binding.workTimerText.text = workTimeLeftText
 
-        //초 추가
-        workTimeLeftText += sec
+            if (workngMin.toInt() == 0 && workingSec.toInt() == 0) {
+                val beep = ToneGenerator(AudioManager.STREAM_MUSIC, ToneGenerator.MAX_VOLUME)
 
-        //타이머 텍스트 보여주기
-        binding.workTimerText.text = workTimeLeftText
-
-        if (min.toInt() == 0 && sec.toInt() == 0) {
-            val beep = ToneGenerator(AudioManager.STREAM_MUSIC, ToneGenerator.MAX_VOLUME)
-
-            //시작타이머 00:00일 시 비프음
-            Thread(Runnable {
-                var count = 0
-                while (count < 3) {
-                    count++
-                    try {
-                        beep.startTone(ToneGenerator.TONE_DTMF_S, 300)
-                        Thread.sleep(1000)
-                    } catch (e: Exception) {
-                        e.printStackTrace()
+                //시작타이머 종료 시 비프음
+                Thread(Runnable {
+                    var count = 0
+                    while (count < 3) {
+                        count++
+                        try {
+                            beep.startTone(ToneGenerator.TONE_DTMF_S, 300)
+                            Thread.sleep(1000)
+                        } catch (e: Exception) {
+                            e.printStackTrace()
+                        }
                     }
-                }
-            }).start()
+                }).start()
+            }
+        }else if (name == "r") {
+            //분이 10보다 작으면 0 붙이기
+            if (restingMin < 10) {
+                restTimeLeftText += "0"
+            }
+            //분 추가
+            restTimeLeftText += "$restingMin:"
 
+            //초가 10보다 작으면 0 붙임
+            if (restingSec < 10) {
+                restTimeLeftText += "0"
+            }
+            //초 추가
+            restTimeLeftText += restingSec
+
+            //타이머 텍스트 보여주기
+            binding.restTimer.text = restTimeLeftText
+
+
+            if (restingMin.toInt() == 0 && restingSec.toInt() == 0) {
+                val beep = ToneGenerator(AudioManager.STREAM_MUSIC, ToneGenerator.MAX_VOLUME)
+
+                //시작타이머 종료 시 비프음
+               /* Thread(Runnable {
+                    var count = 0
+                    while (count < 2) {
+                        count++
+                        try {
+                            beep.startTone(ToneGenerator.TONE_DTMF_S, 300)
+                            Thread.sleep(1000)
+                        } catch (e: Exception) {
+                            e.printStackTrace()
+                        }
+                    }
+                }).start()*/
+            }
         }
     }
 
