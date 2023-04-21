@@ -15,6 +15,7 @@ import androidx.core.view.WindowInsetsControllerCompat
 import com.example.intervalproject.Dialog.CustomDialog
 import com.example.intervalproject.Interface.Interface
 import com.example.intervalproject.databinding.ActivityMainBinding
+import kotlin.concurrent.timer
 
 class MainActivity : AppCompatActivity() {
 
@@ -44,18 +45,17 @@ class MainActivity : AppCompatActivity() {
         //시작버튼
         binding.timerBtn.setOnClickListener {
             var count = 0
-            timerRunning 
 
             timerSetting("start")
-
-
-                startTimer("w")
-
-                startTimer("r")
+            startTimer("w")
+            startTimer("r")
 
             count++
-
             keyBordHide()
+        }
+
+        binding.backTimer.setOnClickListener {
+            timerSetting("back")
         }
     }   //onCreate
 
@@ -68,7 +68,7 @@ class MainActivity : AppCompatActivity() {
         if (mode == "start") {
             binding.settingLayout.visibility = View.GONE
             binding.workingLayout.visibility = View.VISIBLE
-        } else {   //설정 모드
+        } else if (mode == "back"){   //설정 모드
             binding.settingLayout.visibility = View.VISIBLE
             binding.workingLayout.visibility = View.GONE
         }
@@ -108,7 +108,7 @@ class MainActivity : AppCompatActivity() {
                 }.start()
 
                 //타이머 상태 실행상태?
-                timerRunning = true
+                timerRunning = true     //false 일때 타이머 2개 작동되지 왜?
                 //처음실행 아님
                 firstState = false
                 binding.timeStop.setText("일시정지")
@@ -189,7 +189,7 @@ class MainActivity : AppCompatActivity() {
                     }
                 }).start()
             }
-        }else if (name == "r") {
+        } else if (name == "r") {
 
             //분이 10보다 작으면 0 붙이기
             if (restingMin < 10) {
