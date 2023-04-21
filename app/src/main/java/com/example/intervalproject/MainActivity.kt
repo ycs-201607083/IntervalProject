@@ -43,8 +43,18 @@ class MainActivity : AppCompatActivity() {
 
         //시작버튼
         binding.timerBtn.setOnClickListener {
+            var count = 0
+            timerRunning 
+
             timerSetting("start")
-            startTimer()
+
+
+                startTimer("w")
+
+                startTimer("r")
+
+            count++
+
             keyBordHide()
         }
     }   //onCreate
@@ -69,55 +79,62 @@ class MainActivity : AppCompatActivity() {
             stopTimer()
 
         } else {                 //정지일때 실행
-            startTimer()
+            startTimer("w")
         }
     }
 
-    private fun startTimer() {
+    private fun startTimer(name: String) {
         //처음 실행 했을 때 기본 값 실행
-        if (firstState) {
-            val workingMin = binding.workingMin.text.toString()
-            val workingSec = binding.workingSec.text.toString()
 
-            time = (workingMin.toLong() * 60000) + (workingSec.toLong() * 1000) + 1000
-        } else {      //정지 후 이어서 시작이면 기존값 사용
-            time = tempTime
-        }
-        //타이머 실행
-        countDownTimer = object : CountDownTimer(time, 1000) {
-            override fun onTick(millisUntilFinished: Long) {
-                tempTime = millisUntilFinished
-                //타이머 업데이트
-                updateTime("w")
+        when (name) {
+            "w" -> {
+                if (firstState) {
+                    val workingMin = binding.workingMin.text.toString()
+                    val workingSec = binding.workingSec.text.toString()
+
+                    time = (workingMin.toLong() * 60000) + (workingSec.toLong() * 1000) + 1000
+                } else {      //정지 후 이어서 시작이면 기존값 사용
+                    time = tempTime
+                }
+                //타이머 실행
+                countDownTimer = object : CountDownTimer(time, 1000) {
+                    override fun onTick(millisUntilFinished: Long) {
+                        tempTime = millisUntilFinished
+                        //타이머 업데이트
+                        updateTime("w")
+                    }
+
+                    override fun onFinish() {}
+                }.start()
+
+                //타이머 상태 실행상태?
+                timerRunning = true
+                //처음실행 아님
+                firstState = false
+                binding.timeStop.setText("일시정지")
+                Toast.makeText(this, "일시정지", Toast.LENGTH_SHORT).show()
             }
 
-            override fun onFinish() {}
-        }.start()
+            "r" -> {
+                //휴식타이머 실행
+                if (!timerRunning) {
+                    val restingMin = binding.restMin.text.toString()
+                    val restingSec = binding.restSec.text.toString()
 
-        //타이머 상태 = 실행
-        timerRunning = true
-        //처음실행 아님
-        firstState = false
-        binding.timeStop.setText("일시정지")
-        Toast.makeText(this, "일시정지", Toast.LENGTH_SHORT).show()
-
-        //휴식타이머 실행
-        if (!timerRunning) {
-            val restingMin = binding.restMin.text.toString()
-            val restingSec = binding.restSec.text.toString()
-
-            restTime = (restingMin.toLong() * 60000) + (restingSec.toLong() * 1000) + 1000
+                    restTime = (restingMin.toLong() * 60000) + (restingSec.toLong() * 1000) + 1000
 
 
-            countDownTimer = object : CountDownTimer(restTime, 1000) {
-                override fun onTick(millisUntilFinished: Long) {
-                    restTempTime = millisUntilFinished
-                    updateTime("r")
+                    countDownTimer = object : CountDownTimer(restTime, 1000) {
+                        override fun onTick(millisUntilFinished: Long) {
+                            restTempTime = millisUntilFinished
+                            updateTime("r")
 
+                        }
+
+                        override fun onFinish() {}
+                    }.start()
                 }
-
-                override fun onFinish() {}
-            }.start()
+            }
         }
     }
 
@@ -173,6 +190,7 @@ class MainActivity : AppCompatActivity() {
                 }).start()
             }
         }else if (name == "r") {
+
             //분이 10보다 작으면 0 붙이기
             if (restingMin < 10) {
                 restTimeLeftText += "0"
@@ -195,20 +213,21 @@ class MainActivity : AppCompatActivity() {
                 val beep = ToneGenerator(AudioManager.STREAM_MUSIC, ToneGenerator.MAX_VOLUME)
 
                 //시작타이머 종료 시 비프음
-               /* Thread(Runnable {
-                    var count = 0
-                    while (count < 2) {
-                        count++
-                        try {
-                            beep.startTone(ToneGenerator.TONE_DTMF_S, 300)
-                            Thread.sleep(1000)
-                        } catch (e: Exception) {
-                            e.printStackTrace()
-                        }
-                    }
-                }).start()*/
+                /* Thread(Runnable {
+                     var count = 0
+                     while (count < 2) {
+                         count++
+                         try {
+                             beep.startTone(ToneGenerator.TONE_DTMF_S, 300)
+                             Thread.sleep(1000)
+                         } catch (e: Exception) {
+                             e.printStackTrace()
+                         }
+                     }
+                 }).start()*/
             }
         }
+
     }
 
     override fun onBackPressed() {
